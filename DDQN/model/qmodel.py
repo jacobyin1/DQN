@@ -8,9 +8,9 @@ class QModel:
     def __init__(self, epsilon_function, nn_params, device='cuda'):
         self.n_train = 0
         self.e_func = epsilon_function
-        i, h1, h2 = nn_params
-        self.target = Net(i, h1, h2, 16).to(device)
-        self.net = Net(i, h1, h2, 16).to(device)
+        nn_params.append(16)
+        self.target = Net(nn_params).to(device)
+        self.net = Net(nn_params).to(device)
         self.target.eval()
         self.net.train()
         self.losses = []
@@ -90,15 +90,15 @@ class QModel:
 
 class Net(nn.Module):
 
-    def __init__(self, input_size, hidden1, hidden2, output_size):
+    def __init__(self, params):
         super().__init__()
-        self.l1 = nn.Linear(input_size, hidden1)
-        self.l2 = nn.Linear(hidden1, hidden2)
-        self.l3 = nn.Linear(hidden2, output_size)
+        self.layers = nn.ModuleList()
+        for i in range(len(params)-1):
+            self.layers.append(nn.Linear(params[i], params[i+1]))
         self.act = nn.ReLU()
 
     def forward(self, x):
-        x2 = self.act(self.l1(x))
-        x3 = self.act(self.l2(x2))
-        x4 = self.l3(x3)
-        return x4
+        for i in range(len(self.layers) - 1):
+            x = self.layers[i](x)
+            x = self.act(x)
+        return self.layers[-1](x)
