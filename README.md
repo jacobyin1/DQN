@@ -24,6 +24,12 @@ The model takes in flattened array of zeros and ones according to whether an obs
    
 
 
-https://github.com/user-attachments/assets/43ba64b8-4cdc-4edf-9c20-6a2e75043956
 
-Results lackluster at the moment.
+https://github.com/user-attachments/assets/a78dd19f-9211-4cf9-9ebe-7a3a11dcf610
+
+
+Here two snakes play against each other according to the same trained model.
+
+![Figure_1](https://github.com/user-attachments/assets/64e17bf4-22f3-474c-838a-9c4d5be48893)
+
+Loss graph (tick upwards was from adding the greater than one term to loss function)
