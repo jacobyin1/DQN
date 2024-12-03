@@ -39,13 +39,21 @@ class QModel:
         i_o = torch.argmax(o, dim=1)
         i_x = torch.arange(i_a.shape[0])
         s1_vals_compare = s1_vals[i_x, i_a, i_o]
+
         s2_vals = self.target(s2).reshape(-1, 4, 4)
         s2_is_zero = torch.all(s2 == 0, dim=1)
         v1, _ = torch.min(s2_vals, dim=2)
         s2_vals_i, _ = torch.max(v1, dim=1)
         s2_vals_compare = torch.where(s2_is_zero, 0, s2_vals_i)
         s2_vals_compare = s2_vals_compare.detach()
-        return nn.MSELoss()(s1_vals_compare, s2_vals_compare * gamma + r)
+
+        loss1 = nn.MSELoss()(s1_vals_compare, s2_vals_compare * gamma + r)
+
+        b1 = s1_vals < -1
+        b2 = s1_vals > 1
+        loss2_i = torch.where(b1, -1 - s1_vals,
+                              torch.where(b2, s1_vals - 1, 0))
+        return loss1 + torch.mean(loss2_i)
 
     def train(self, data, optimizer):
         self.n_train = self.n_train + 1
@@ -95,8 +103,8 @@ class Net(nn.Module):
     def __init__(self, params):
         super().__init__()
         self.layers = nn.ModuleList()
-        for i in range(len(params)-1):
-            self.layers.append(nn.Linear(params[i], params[i+1]))
+        for i in range(len(params) - 1):
+            self.layers.append(nn.Linear(params[i], params[i + 1]))
         self.act = nn.ReLU()
 
     def forward(self, x):
