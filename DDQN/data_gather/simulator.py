@@ -11,8 +11,8 @@ def simulate(fig, ax, states):
     ax.set_yticks(ticks=np.arange(-0.5, col, 1), labels=[])
     ax.grid(color="white", linestyle="-", linewidth=1)
     ax.tick_params(axis="both", which="both", length=0)
-    anim = animation.FuncAnimation(fig=fig, func=lambda f: im.set_data(f), frames=states, interval=300,
-                                   repeat=True)
+    anim = animation.FuncAnimation(fig=fig, func=lambda f: im.set_data(f), frames=states, interval=200,
+                                   repeat=False)
     return anim
 
 

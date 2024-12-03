@@ -40,15 +40,17 @@ class QModel:
         i_x = torch.arange(i_a.shape[0])
         s1_vals_compare = s1_vals[i_x, i_a, i_o]
         s2_vals = self.target(s2).reshape(-1, 4, 4)
+        s2_is_zero = torch.all(s2 == 0, dim=1)
         v1, _ = torch.min(s2_vals, dim=2)
-        s2_vals_compare, _ = torch.max(v1, dim=1)
+        s2_vals_i, _ = torch.max(v1, dim=1)
+        s2_vals_compare = torch.where(s2_is_zero, 0, s2_vals_i)
         s2_vals_compare = s2_vals_compare.detach()
         return nn.MSELoss()(s1_vals_compare, s2_vals_compare * gamma + r)
 
     def train(self, data, optimizer):
         self.n_train = self.n_train + 1
         optimizer.zero_grad()
-        loss = self.loss(data, 0.99)
+        loss = self.loss(data, 0.95)
         loss.backward()
         optimizer.step()
         self.losses.append(loss.item())

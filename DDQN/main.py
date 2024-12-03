@@ -14,17 +14,17 @@ def e_func(n):
     # b = 0.82177
     # c = -0.00263
     # return a * (b ** (-1 * n_train_k)) + c
-    return 0.1
+    return 10 ** (-0.001 * n)
 
 
 env = environment.Environment(20, (15, 15), (5, 5))
 replay = experience_replay.ExperienceReplay(20000, env)
 qmodel = qmodel.QModel(e_func, [418, 418, 418, 418], device='cuda')
-# qmodel.load_model()
+qmodel.load_model()
 
-optimizer = optim.Adam(qmodel.parameters(), lr=0.001)
+optimizer = optim.Adam(qmodel.parameters(), lr=0.0001)
 
-for epoch in range(20000):
+for epoch in range(10000):
     replay.gather(qmodel, episodes=100)
 
     if epoch % 10 == 0:
@@ -38,13 +38,13 @@ for epoch in range(20000):
         print(epoch)
 
     for n_train in range(20):
-        data = replay.sample(batch_size=100, device='cuda')
+        data = replay.sample(batch_size=50, device='cuda')
         qmodel.train(data, optimizer)
     qmodel.update_target()
 
 fig, ax = plt.subplots(figsize=(10, 10))
 qmodel.graph_loss(ax)
-
+plt.show()
 qmodel.save_model()
 
 
