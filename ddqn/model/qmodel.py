@@ -2,6 +2,7 @@ import torch
 import random
 from torch import nn
 import numpy as np
+import h5py
 
 
 class QModel:
@@ -82,6 +83,12 @@ class QModel:
             for loss in self.losses:
                 f2.write(str(round(loss, 4)))
                 f2.write(',')
+
+    def save_model_hdf(self):
+        with h5py.File("model/state_dict.h5", "w") as f:
+            for key, value in self.target.state_dict().items():
+                f.create_dataset(key, data=value.cpu().numpy())
+
 
     def load_model(self):
         state_dict = torch.load('model/state_dict.pth', weights_only=True)
