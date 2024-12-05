@@ -16,7 +16,7 @@ The model takes in flattened array of zeros and ones according to whether an obs
 
 # To do:
 
-1. Results are very poor against human at the moment because it is not used to this behavior. It seems that playing against itself is not good enough because some states were never seen.
+1. Results are very poor against human at the moment because it is not used to this behavior. It seems that playing against itself is not good enough because some states were never seen. (Player is green below)
 
    ![image](https://github.com/user-attachments/assets/8859d7bc-61e5-4508-bafa-4baffc8250f4)
 
