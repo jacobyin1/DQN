@@ -16,10 +16,12 @@ The model takes in flattened array of zeros and ones according to whether an obs
 
 # To do:
 
-1. Work on fine tuning parameters and see how good this kind of architecture can work.
-2. Experiment with larger models such as more layers.
-3. Compare with normal q learning.
-4. Try another method.
+1. Results are very poor against human at the moment because it is not used to this behavior. It seems that playing against itself is not good enough because some states were never seen. ![image](https://github.com/user-attachments/assets/8859d7bc-61e5-4508-bafa-4baffc8250f4)
+
+2. Get data from humans/other ai and train on it or find a different workaround for this.
+3. Experiment with larger models such as more layers.
+4. Compare with normal q learning.
+5. Try another method.
 
    
 
